@@ -34,6 +34,7 @@ gem_files.each do |filename|
     end
     emails = runner.email || ["unknown"]
     emails.each do |email|
+      email = email.to_s.strip
       author_stats[email] ||= {}
       author_stats[email][basename] ||= []
       author_stats[email][basename] << runner.tags
