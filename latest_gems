@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+# coding: utf-8
+
+# download the most recent version of each gem so we can perform analysis
+#
+
+require "rubygems"
+require "open-uri"
+
+dest_dir = ARGV.shift
+
+if dest_dir.nil?
+  $stderr.puts "USAGE: ./latest_gems target_dir"
+  exit 1
+elsif !File.directory?(dest_dir)
+  $stderr.puts "#{dest_dir} not found"
+  exit 1
+end
+
+gems     = Marshal.load(Gem.inflate(open("http://rubygems.org/Marshal.4.8.Z").read))
+
+specs = gems.map(&:last)
+puts "total gems: #{specs.size}"
+
+specs = specs.group_by { |spec| spec.name }
+puts "unique gems: #{specs.keys.size}"
+
+specs.each do |name, spec|
+  specs[name] = spec.sort_by { |spec| spec.version }.last
+end
+
+specs.each do |name, spec|
+  filename  = "#{name}-#{spec.version}.gem"
+  dest_file = File.join(dest_dir, filename)
+  url       = "http://rubygems.org/downloads/#{filename}"
+
+  if !File.file?(dest_file) || File.size(dest_file) == 0
+    `wget -O #{dest_file} #{url} > /dev/null 2>&1`
+  end
+end
