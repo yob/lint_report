@@ -7,6 +7,7 @@ require "zlib"
 require "fileutils"
 require "ostruct"
 require "thread"
+require "gem_lint"
 
 module LintReport
   class App
@@ -24,7 +25,7 @@ module LintReport
         sleep 0.5
       end
       remove_old_gems
-      #analyse_gems
+      analyse_gems
     end
 
     private
@@ -79,6 +80,18 @@ module LintReport
       end
     end
 
+    def analyse_gems
+      File.open(output_file, "w") do |f|
+        Dir.entries(cachedir).sort.each do |basename|
+          if basename[0,1] != "."
+            path = File.join(cachedir, basename)
+            f.write(GemLint::Runner.new(path).to_s(:detailed) + "\n")
+            f.flush
+          end
+        end
+      end
+    end
+
     def index
       data = Zlib::GzipReader.new(open("http://rubygems.org/latest_specs.4.8.gz")).read
       Marshal.load(data)
@@ -102,6 +115,10 @@ module LintReport
 
     def cachedir
       @cachedir ||= File.expand_path(options[:cachedir])
+    end
+
+    def output_file
+      @output_file ||= File.expand_path(options[:output])
     end
 
     def options
