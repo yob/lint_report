@@ -1,0 +1,20 @@
+= LintReport
+
+Runs the GemLint suite of checks against all rubygems available on
+rubygems.org.
+
+The design is a two stage process
+
+* stage one is to download the latest version of all gems and generate a machine
+  parsable text file with failure data
+* stage two it to parse the output from stage one and generate reports.
+
+== Usage
+
+  gem install lint_report
+  lint_report --cachedir ~/gems --output data.log
+  lint_website --data data.log --site ~/site
+
+== Status
+
+This is still a work in progress, proceed with caution.
