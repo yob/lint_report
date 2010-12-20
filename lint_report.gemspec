@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.homepage          = "http://github.com/yob/lint_report"
   s.has_rdoc          = true
   s.rdoc_options      << "--title" << "Lint Report" << "--line-numbers"
-  s.files             = Dir.glob("lib/**/*") + Dir.glob("bin/**/*") + ["README"]
+  s.files             = Dir.glob("lib/**/*") + Dir.glob("bin/**/*") + ["README","CHANGELOG"]
   s.required_rubygems_version = ">=1.3.2"
   s.executables       << "lint_report"
 
