@@ -1,13 +1,16 @@
 = LintReport
 
-Runs the GemLint suite of checks against all rubygems available on
-rubygems.org.
+Runs the GemLint suite of checks against the latest version of all rubygems
+available on rubygems.org.
 
-The design is a two stage process
+Operates in a two stage process:
 
-* stage one is to download the latest version of all gems and generate a machine
+* stage one downloads the latest version of all gems and generate a machine
   parsable text file with failure data
-* stage two it to parse the output from stage one and generate reports.
+* stage two parses the output from stage one and generates reports.
+
+Only stage one is implemented, so second stage analysis is limited to grepping
+the output log.
 
 == Usage
 
